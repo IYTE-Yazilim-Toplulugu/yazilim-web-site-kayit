@@ -11,7 +11,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useToast} from "@/components/ui/use-toast";
 import {Button} from "@/components/ui/button";
-import {CheckCircle, LandPlot, Plus, PlusCircle, Send} from "lucide-react";
+import {CheckCircle, LandPlot} from "lucide-react";
 
 import {motion} from 'framer-motion';
 import {redirect} from "next/navigation";
@@ -37,8 +37,8 @@ export default function RegisterPage() {
         department: z.string().optional(),
         fromIZTECH: z.boolean(),
         place: z.string().optional(),
-        phone: z.string().regex(RegExp("\\+\\d+"), {
-            message: "Please enter a valid phone number. (+1 5** *** **** / +905*********)",
+        phone: z.string().regex(RegExp("(\\+\\d+)|(05\d{9})"), {
+            message: "Please enter a valid phone number. (+1 5** *** **** / 05*********)",
         }),
         email: z.string().email({
             message: "Please enter a valid email address.",
@@ -144,7 +144,6 @@ export default function RegisterPage() {
                         )}
                     />
                     <FormItem className="flex flex-row gap-x-2">
-                        <FormLabel>I&#39;m Student</FormLabel>
                         <FormControl>
                             <Checkbox className="control" checked={isStudent} onCheckedChange={x => {
                                 if (x === true)
@@ -155,6 +154,7 @@ export default function RegisterPage() {
                                 }
                             }}/>
                         </FormControl>
+                        <FormLabel>I&#39;m Student</FormLabel>
                         <FormMessage/>
                     </FormItem>
                     {isStudent && <motion.div
@@ -178,7 +178,7 @@ export default function RegisterPage() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex flex-col my-6">
+                            <div className="flex flex-col">
                                 <FormField
                                     control={form.control}
                                     name="department"
@@ -186,7 +186,10 @@ export default function RegisterPage() {
                                         <FormItem>
                                             <FormLabel>Department</FormLabel>
                                             <FormControl>
-                                                <Select {...field} value={department} onValueChange={x => setDepartment(x)}>
+                                                <Select {...field} value={department} onValueChange={x => {
+                                                    form.clearErrors("department");
+                                                    setDepartment(x);
+                                                }}>
                                                     <SelectTrigger className="w-[180px] control">
                                                         <SelectValue placeholder="Select a department" />
                                                     </SelectTrigger>
@@ -239,7 +242,7 @@ export default function RegisterPage() {
                             <FormItem>
                                 <FormLabel>Phone Number</FormLabel>
                                 <FormControl>
-                                    <Input className="control" placeholder="+90 5** *** ****" {...field} />
+                                    <Input className="control" placeholder="05*********" {...field} />
                                 </FormControl>
                                 <FormMessage className="text-[#606060]"/>
                             </FormItem>
