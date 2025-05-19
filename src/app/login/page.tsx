@@ -38,10 +38,10 @@ export default function Login() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center min-h-screen"
+            className="m-8 flex flex-col items-center justify-center min-h-screen"
         >
             <Form {...form}>
-                <motion.form layout onSubmit={form.handleSubmit(onSubmit)} style={{width: "30vw"}} className="flex flex-col gap-y-3">
+                <motion.form layout onSubmit={form.handleSubmit(onSubmit)} className="w-full lg:max-w-1/3 flex flex-col gap-y-3">
                     <FormField
                         control={form.control}
                         name="email"

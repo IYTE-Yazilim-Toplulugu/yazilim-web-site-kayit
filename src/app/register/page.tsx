@@ -115,7 +115,7 @@ export default function RegisterPage() {
     });
 
     return (
-        <div className="flex h-dvh align-middle items-center justify-center">
+        <div className="m-8 flex h-dvh align-middle items-center justify-center">
             {isSubmitted ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-6">
                     <div className="h-16 w-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
@@ -134,10 +134,10 @@ export default function RegisterPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.5 }}
-                className="flex flex-col items-center justify-center min-h-screen"
+                className="w-full flex flex-col items-center justify-center min-h-screen"
             >
                 <Form {...form}>
-                    <motion.form layout onSubmit={form.handleSubmit(onSubmit)} style={{width: "30vw"}} className="flex flex-col gap-y-3">
+                    <motion.form layout onSubmit={form.handleSubmit(onSubmit)} className="w-full lg:max-w-1/3 flex flex-col gap-y-3">
                         <FormField
                             control={form.control}
                             name="fullName"
