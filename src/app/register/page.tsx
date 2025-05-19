@@ -15,6 +15,7 @@ import {CheckCircle, LandPlot} from "lucide-react";
 
 import {motion} from 'framer-motion';
 import {redirect} from "next/navigation";
+import Link from "next/link";
 
 export default function RegisterPage() {
     const {toast} = useToast();
@@ -114,7 +115,7 @@ export default function RegisterPage() {
     });
 
     return (
-        <div className="flex h-dvh align-middle items-center justify-center">
+        <div className="m-8 flex h-dvh align-middle items-center justify-center">
             {isSubmitted ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-6">
                     <div className="h-16 w-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
@@ -128,160 +129,167 @@ export default function RegisterPage() {
                         Return To Home
                     </Button>
                 </div>
-            ) : <Form {...form}>
-                <motion.form layout onSubmit={form.handleSubmit(onSubmit)} style={{width: "30vw"}} className="flex flex-col gap-y-3">
-                    <FormField
-                        control={form.control}
-                        name="fullName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl>
-                                    <Input className="control" placeholder="Abuzer Kömürcü" {...field} />
-                                </FormControl>
-                                <FormMessage className="text-[#606060]"/>
-                            </FormItem>
-                        )}
-                    />
-                    <FormItem className="flex flex-row gap-x-2">
-                        <FormControl>
-                            <Checkbox className="control" checked={isStudent} onCheckedChange={x => {
-                                if (x === true)
-                                    setIsStudent(true);
-                                else{
-                                    setIsStudent(false);
-                                    setFromIZTECH(false);
-                                }
-                            }}/>
-                        </FormControl>
-                        <FormLabel>I&#39;m Student</FormLabel>
-                        <FormMessage/>
-                    </FormItem>
-                    {isStudent && <motion.div
-                        layout
-                        initial={{ scaleY: 0, originY: 0 }}
-                        animate={{ scaleY: 1, originY: 0 }}
-                        transition={{duration: 0.2}}
-                        exit={{ scaleY: 0, originY: 0 }}
-                    >
-                        <div className="flex flex-col gap-y-2">
-                            <FormField
-                                control={form.control}
-                                name="schoolNumber"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>School Number</FormLabel>
-                                        <FormControl>
-                                            <Input className="control" placeholder="3293293289" {...field} />
-                                        </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
-                                    </FormItem>
-                                )}
-                            />
-                            <div className="flex flex-col">
+            ) : <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.5 }}
+                className="w-full flex flex-col items-center justify-center min-h-screen"
+            >
+                <Form {...form}>
+                    <motion.form layout onSubmit={form.handleSubmit(onSubmit)} className="w-full lg:max-w-1/3 flex flex-col gap-y-3">
+                        <FormField
+                            control={form.control}
+                            name="fullName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Full Name</FormLabel>
+                                    <FormControl>
+                                        <Input className="control" placeholder="Abuzer Kömürcü" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-[#606060]"/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormItem className="flex flex-row gap-x-2">
+                            <FormControl>
+                                <Checkbox className="control" checked={isStudent} onCheckedChange={x => {
+                                    if (x === true)
+                                        setIsStudent(true);
+                                    else{
+                                        setIsStudent(false);
+                                        setFromIZTECH(false);
+                                    }
+                                }}/>
+                            </FormControl>
+                            <FormLabel>I&#39;m Student</FormLabel>
+                            <FormMessage/>
+                        </FormItem>
+                        {isStudent && <motion.div
+                            layout
+                            initial={{ scaleY: 0, originY: 0 }}
+                            animate={{ scaleY: 1, originY: 0 }}
+                            transition={{duration: 0.2}}
+                            exit={{ scaleY: 0, originY: 0 }}
+                        >
+                            <div className="flex flex-col gap-y-2">
                                 <FormField
                                     control={form.control}
-                                    name="department"
+                                    name="schoolNumber"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Department</FormLabel>
+                                            <FormLabel>School Number</FormLabel>
                                             <FormControl>
-                                                <Select {...field} value={department} onValueChange={x => {
-                                                    form.clearErrors("department");
-                                                    setDepartment(x);
-                                                }}>
-                                                    <SelectTrigger className="w-[180px] control">
-                                                        <SelectValue placeholder="Select a department" />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="control">
-                                                        <SelectItem value="ceng">Computer Engineering</SelectItem>
-
-                                                    </SelectContent>
-                                                </Select>
+                                                <Input className="control" placeholder="3293293289" {...field} />
                                             </FormControl>
                                             <FormMessage className="text-[#606060]"/>
                                         </FormItem>
                                     )}
                                 />
+                                <div className="flex flex-col">
+                                    <FormField
+                                        control={form.control}
+                                        name="department"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Department</FormLabel>
+                                                <FormControl>
+                                                    <Select {...field} value={department} onValueChange={x => {
+                                                        form.clearErrors("department");
+                                                        setDepartment(x);
+                                                    }}>
+                                                        <SelectTrigger className="w-[180px] control">
+                                                            <SelectValue placeholder="Select a department" />
+                                                        </SelectTrigger>
+                                                        <SelectContent className="control">
+                                                            <SelectItem value="ceng">Computer Engineering</SelectItem>
+
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                                <FormMessage className="text-[#606060]"/>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <FormItem className="flex flex-row gap-x-2">
+                                    <FormControl>
+                                        <Checkbox checked={fromIZTECH} onCheckedChange={x => {
+                                            if (x === true){
+                                                setFromIZTECH(true);
+                                                setIsStudent(true);
+                                            }
+                                            else{
+                                                setFromIZTECH(false);
+                                            }
+                                        }}/>
+                                    </FormControl>
+                                    <FormLabel>I&#39;m From IZTECH</FormLabel>
+                                </FormItem>
                             </div>
-                            <FormItem className="flex flex-row gap-x-2">
-                                <FormControl>
-                                    <Checkbox checked={fromIZTECH} onCheckedChange={x => {
-                                        if (x === true){
-                                            setFromIZTECH(true);
-                                            setIsStudent(true);
-                                        }
-                                        else{
-                                            setFromIZTECH(false);
-                                        }
-                                    }}/>
-                                </FormControl>
-                                <FormLabel>I&#39;m From IZTECH</FormLabel>
-                            </FormItem>
-                        </div>
-                    </motion.div>}
+                        </motion.div>}
 
-                    {!fromIZTECH && <FormField
-                        control={form.control}
-                        name="place"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Place</FormLabel>
-                                <FormControl>
-                                    <Input className="control" placeholder="Amasya Uni" {...field} />
-                                </FormControl>
-                                <FormMessage className="text-[#606060]"/>
-                            </FormItem>
-                        )}
-                    />}
+                        {!fromIZTECH && <FormField
+                            control={form.control}
+                            name="place"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Place</FormLabel>
+                                    <FormControl>
+                                        <Input className="control" placeholder="Amasya Uni" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-[#606060]"/>
+                                </FormItem>
+                            )}
+                        />}
 
-                    <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Phone Number</FormLabel>
-                                <FormControl>
-                                    <Input className="control" placeholder="05*********" {...field} />
-                                </FormControl>
-                                <FormMessage className="text-[#606060]"/>
-                            </FormItem>
-                        )}
-                    />
+                        <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Phone Number</FormLabel>
+                                    <FormControl>
+                                        <Input className="control" placeholder="05*********" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-[#606060]"/>
+                                </FormItem>
+                            )}
+                        />
 
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email Address</FormLabel>
-                                <FormControl>
-                                    <Input className="control" placeholder="email@iztech.com.tr" {...field} />
-                                </FormControl>
-                                <FormMessage className="text-[#606060]"/>
-                            </FormItem>
-                        )}
-                    />
-                    <motion.div
-                        initial={{
-                            backgroundColor: "#181818",
-                            borderRadius: "6px"
-                        }}
-                        whileHover={{
-                            backgroundColor: "#865b01",
-                            borderRadius: "6px",
-                            transition: {
-                                delay: 0.1,
-                                duration: 0.5,
-                                ease: [0.19, 1, 0.22, 1],
-                            },}}
-                        whileTap={{
-                            borderRadius: "2px"
-                        }}
-                    >
-                        <Button type="submit" className="w-full" disabled={isSubmitting}>
-                            {isSubmitting ? (
-                                <span className="flex items-center gap-2">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email Address</FormLabel>
+                                    <FormControl>
+                                        <Input className="control" placeholder="email@iztech.com.tr" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-[#606060]"/>
+                                </FormItem>
+                            )}
+                        />
+                        <motion.div
+                            initial={{
+                                backgroundColor: "#181818",
+                                borderRadius: "6px"
+                            }}
+                            whileHover={{
+                                backgroundColor: "#865b01",
+                                borderRadius: "6px",
+                                transition: {
+                                    delay: 0.1,
+                                    duration: 0.5,
+                                    ease: [0.19, 1, 0.22, 1],
+                                },}}
+                            whileTap={{
+                                borderRadius: "2px"
+                            }}
+                        >
+                            <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                {isSubmitting ? (
+                                    <span className="flex items-center gap-2">
                     <svg
                         className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                         xmlns="http://www.w3.org/2000/svg"
@@ -304,16 +312,21 @@ export default function RegisterPage() {
                     </svg>
                     Sending...
                   </span>
-                            ) : (
-                                <span className="flex items-center gap-2">
+                                ) : (
+                                    <span className="flex items-center gap-2">
                                     Sign Up
                                     <LandPlot className="h-4 w-4" />
                                 </span>
-                            )}
-                        </Button>
-                    </motion.div>
-                </motion.form>
-            </Form> }
+                                )}
+                            </Button>
+                        </motion.div>
+                    </motion.form>
+                </Form>
+                <div className={"mt-3 w-full flex justify-center"}>
+                    <Link className={" text-[#808080]"} href="/login">Have you registered?</Link>
+                </div>
+
+            </motion.div>}
         </div>
     );
 }
