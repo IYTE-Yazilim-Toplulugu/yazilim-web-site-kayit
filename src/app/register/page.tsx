@@ -9,23 +9,24 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {useEffect, useState} from "react";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {useToast} from "@/components/ui/use-toast";
 import {Button} from "@/components/ui/button";
-import {CheckCircle, LandPlot} from "lucide-react";
+import {LandPlot} from "lucide-react";
 
 import {motion} from 'framer-motion';
-import {redirect} from "next/navigation";
 import Link from "next/link";
+import {supabase} from "../../../lib/supabase";
+
+const departments = await supabase
+    .from("departments")
+    .select("name,slug");
+
 
 export default function RegisterPage() {
-    const {toast} = useToast();
-
     const [isStudent, setIsStudent] = useState(true);
     const [fromIZTECH, setFromIZTECH] = useState(true);
     const [department, setDepartment] = useState('');
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const formSchema = z.object({
         fullName: z.string().regex(RegExp("^([a-zA-ZığüşöçİĞÜŞÖÇ]+ )+[a-zA-ZğıüşöçİĞÜŞÖÇ]+$"), {
@@ -38,12 +39,15 @@ export default function RegisterPage() {
         department: z.string().optional(),
         fromIZTECH: z.boolean(),
         place: z.string().optional(),
-        phone: z.string().regex(RegExp("(\\+\\d+)|(05\d{9})"), {
+        phone: z.string().regex(RegExp("^((\\+\\d+)|(05\\d{9}))$"), {
             message: "Please enter a valid phone number. (+1 5** *** **** / 05*********)",
         }),
         email: z.string().email({
             message: "Please enter a valid email address.",
         }),
+        password: z.string().min(6, {
+            message: "Please enter a valid password, minimum 6 characters.",
+        })
     });
 
     const schema = formSchema.superRefine((data, ctx) => {
@@ -77,20 +81,27 @@ export default function RegisterPage() {
     });
 
     function onSubmit(values: z.infer<typeof schema>) {
-        setIsSubmitting(true)
+        setIsSubmitting(true);
 
-        console.log(values);
-        // Simulate API call
-        setTimeout(() => {
-            console.log(values)
-            setIsSubmitting(false)
-            setIsSubmitted(true)
+        if (values.isStudent){
+            if (values.fromIZTECH){
+                values.place = undefined;
+            }
+        }
+        else{
+            values.department = undefined;
+            values.schoolNumber = undefined;
+        }
 
-            toast({
-                title: "Message sent!",
-                description: "Thank you for your message. I'll get back to you soon.",
-            })
-        }, 1500)
+        const data = {
+            isRegister: true,
+            body: values
+        };
+
+        console.log(data);
+
+        window.top?.postMessage(JSON.stringify(data), "*");
+        setIsSubmitting(false);
     }
 
     const form = useForm<z.infer<typeof schema>>({
@@ -103,7 +114,8 @@ export default function RegisterPage() {
             schoolNumber: "",
             department: "",
             phone: "",
-            email: ""
+            email: "",
+            password: ""
         }
     });
 
@@ -116,20 +128,7 @@ export default function RegisterPage() {
 
     return (
         <div className="m-8 flex h-dvh align-middle items-center justify-center">
-            {isSubmitted ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div className="h-16 w-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
-                        <CheckCircle className="h-8 w-8 text-green-500" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">Congratulations!</h3>
-                    <p className="text-muted-foreground mb-6">
-                        You have successfully registered.
-                    </p>
-                    <Button variant="outline" onClick={() => redirect("/")}>
-                        Return To Home
-                    </Button>
-                </div>
-            ) : <motion.div
+            <motion.div
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
@@ -202,8 +201,13 @@ export default function RegisterPage() {
                                                             <SelectValue placeholder="Select a department" />
                                                         </SelectTrigger>
                                                         <SelectContent className="control">
-                                                            <SelectItem value="ceng">Computer Engineering</SelectItem>
-
+                                                            {
+                                                                departments.data?.map(x =>
+                                                                    (
+                                                                        <SelectItem key={x.slug} value={x.slug}>{x.name}</SelectItem>
+                                                                    )
+                                                                )
+                                                            }
                                                         </SelectContent>
                                                     </Select>
                                                 </FormControl>
@@ -270,6 +274,19 @@ export default function RegisterPage() {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input type={"password"} className="control" placeholder="********" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-[#606060]"/>
+                                </FormItem>
+                            )}
+                        />
                         <motion.div
                             initial={{
                                 backgroundColor: "#181818",
@@ -288,36 +305,10 @@ export default function RegisterPage() {
                             }}
                         >
                             <Button type="submit" className="w-full" disabled={isSubmitting}>
-                                {isSubmitting ? (
-                                    <span className="flex items-center gap-2">
-                    <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                      <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                      ></circle>
-                      <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Sending...
-                  </span>
-                                ) : (
-                                    <span className="flex items-center gap-2">
+                                <span className="flex items-center gap-2">
                                     Sign Up
                                     <LandPlot className="h-4 w-4" />
                                 </span>
-                                )}
                             </Button>
                         </motion.div>
                     </motion.form>
@@ -326,7 +317,7 @@ export default function RegisterPage() {
                     <Link className={" text-[#808080]"} href="/login">Have you registered?</Link>
                 </div>
 
-            </motion.div>}
+            </motion.div>
         </div>
     );
 }

@@ -9,6 +9,8 @@ import {Heart} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Link from "next/link";
+import {useSearchParams} from "next/navigation";
+import {Label} from "@/components/ui/label";
 
 const formSchema = z.object({
     email: z.string().email({
@@ -19,8 +21,13 @@ const formSchema = z.object({
     })
 });
 
-function onSubmit(e: z.infer<typeof formSchema>) {
-    console.log(e);
+function onSubmit(values: z.infer<typeof formSchema>) {
+    const data = {
+        isRegister: false,
+        body: values
+    };
+
+    window.top?.postMessage(JSON.stringify(data), "*");
 }
 
 export default function Login() {
@@ -32,6 +39,9 @@ export default function Login() {
         }
     });
 
+    const params = useSearchParams();
+    const msg = params.get("msg");
+
     return (
         <motion.div
             initial={{ opacity: 0, y: -50 }}
@@ -40,6 +50,9 @@ export default function Login() {
             transition={{ duration: 0.5 }}
             className="m-8 flex flex-col items-center justify-center min-h-screen"
         >
+            <Label>
+                {msg}
+            </Label>
             <Form {...form}>
                 <motion.form layout onSubmit={form.handleSubmit(onSubmit)} className="w-full lg:max-w-1/3 flex flex-col gap-y-3">
                     <FormField
