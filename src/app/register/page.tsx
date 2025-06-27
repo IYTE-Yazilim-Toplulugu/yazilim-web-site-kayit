@@ -132,7 +132,7 @@ export default function RegisterPage() {
 
     return (
         <div className={"flex h-dvh "}>
-            <div className="relative w-2/3 overflow-hidden">
+            <div className="hidden relative w-2/3 overflow-hidden sm:block">
                 <Image
                     src="/images/back.jpg"
                     width={2560}
@@ -333,7 +333,7 @@ export default function RegisterPage() {
                                     borderRadius: "2px"
                                 }}
                             >
-                                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                <Button type="submit" className="w-full cursor-pointer" disabled={isSubmitting}>
                                     <span className="flex items-center gap-2">
                                         Sign Up
                                         <LandPlot className="h-4 w-4" />

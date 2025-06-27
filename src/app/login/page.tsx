@@ -45,7 +45,7 @@ export default function Login() {
 
     return (
         <div className={"flex h-dvh"}>
-            <div className="relative w-2/3 bg-background overflow-hidden">
+            <div className="hidden relative w-2/3 bg-background overflow-hidden md:block">
                 <Image
                     src="/images/back.jpg"
                     width={2560}
@@ -112,7 +112,7 @@ export default function Login() {
                                     borderRadius: "2px"
                                 }}
                             >
-                                <Button type="submit" className="w-full">
+                                <Button type="submit" className="w-full cursor-pointer">
                                     <span className="flex items-center gap-2">
                                         Sign In
                                         <Heart className="h-4 w-4" />
