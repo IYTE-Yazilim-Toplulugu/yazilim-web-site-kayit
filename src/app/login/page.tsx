@@ -1,16 +1,16 @@
 "use client"
 
-import {motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 import { z } from "zod";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {useForm} from "react-hook-form";
-import {Input} from "@/components/ui/input";
-import {Heart} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import {useSearchParams} from "next/navigation";
-import {Label} from "@/components/ui/label";
+import { useSearchParams } from "next/navigation";
+import { Label } from "@/components/ui/label";
 import Image from "next/image";
 
 const formSchema = z.object({
@@ -45,11 +45,11 @@ export default function Login() {
 
     return (
         <div className={"flex h-dvh"}>
-            <div className="relative flex-grow-4 bg-[var(--background)] overflow-hidden">
+            <div className="relative w-2/3 bg-background overflow-hidden">
                 <Image
                     src="/images/back.jpg"
-                    width={256}
-                    height={170}
+                    width={2560}
+                    height={1700}
                     className="w-full h-full object-cover"
                     alt="background"
                 />
@@ -77,7 +77,7 @@ export default function Login() {
                                         <FormControl>
                                             <Input className="control" type={"email"} placeholder="abc@kamil.com" {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />
@@ -90,7 +90,7 @@ export default function Login() {
                                         <FormControl>
                                             <Input className="control" type={"password"} {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />
@@ -106,16 +106,17 @@ export default function Login() {
                                         delay: 0.1,
                                         duration: 0.5,
                                         ease: [0.19, 1, 0.22, 1],
-                                    },}}
+                                    },
+                                }}
                                 whileTap={{
                                     borderRadius: "2px"
                                 }}
                             >
                                 <Button type="submit" className="w-full">
-                            <span className="flex items-center gap-2">
-                                Sign In
-                                <Heart className="h-4 w-4" />
-                            </span>
+                                    <span className="flex items-center gap-2">
+                                        Sign In
+                                        <Heart className="h-4 w-4" />
+                                    </span>
                                 </Button>
                             </motion.div>
                         </motion.form>

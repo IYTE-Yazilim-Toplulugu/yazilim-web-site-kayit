@@ -1,23 +1,22 @@
 "use client"
-
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {useForm} from "react-hook-form";
-
-import { Input } from "@/components/ui/input"
+import { useForm } from "react-hook-form";
+import { supabase } from "@/../lib/supabase";
+import { motion } from 'framer-motion';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {useEffect, useState} from "react";
-import {Checkbox} from "@/components/ui/checkbox";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {Button} from "@/components/ui/button";
-import {LandPlot} from "lucide-react";
+import { LandPlot } from "lucide-react";
 
-import {motion} from 'framer-motion';
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import {supabase} from "../../../lib/supabase";
 import Image from "next/image";
-import {useSearchParams} from "next/navigation";
-import {Label} from "@/components/ui/label";
+import { useSearchParams } from "next/navigation";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 const departments = await supabase
     .from("departments")
@@ -53,7 +52,7 @@ export default function RegisterPage() {
     });
 
     const schema = formSchema.superRefine((data, ctx) => {
-        if (data.isStudent){
+        if (data.isStudent) {
             if (!data.schoolNumber || data.schoolNumber.trim().length < 1) {
                 ctx.addIssue({
                     path: ["schoolNumber"],
@@ -73,7 +72,7 @@ export default function RegisterPage() {
         else
             data.fromIZTECH = false;
 
-        if (!data.fromIZTECH && (!data.place || data.place.trim().length < 5)){
+        if (!data.fromIZTECH && (!data.place || data.place.trim().length < 5)) {
             ctx.addIssue({
                 path: ["place"],
                 message: "Place must be at least 5 characters.",
@@ -85,12 +84,12 @@ export default function RegisterPage() {
     function onSubmit(values: z.infer<typeof schema>) {
         setIsSubmitting(true);
 
-        if (values.isStudent){
-            if (values.fromIZTECH){
+        if (values.isStudent) {
+            if (values.fromIZTECH) {
                 values.place = undefined;
             }
         }
-        else{
+        else {
             values.department = undefined;
             values.schoolNumber = undefined;
         }
@@ -133,11 +132,11 @@ export default function RegisterPage() {
 
     return (
         <div className={"flex h-dvh "}>
-            <div className="relative flex-grow-4 bg-[var(--background)] overflow-hidden">
+            <div className="relative w-2/3 overflow-hidden">
                 <Image
                     src="/images/back.jpg"
-                    width={256}
-                    height={170}
+                    width={2560}
+                    height={1700}
                     className="w-full h-full object-cover"
                     alt="background"
                 />
@@ -175,7 +174,7 @@ export default function RegisterPage() {
                                         <FormControl>
                                             <Input className="control" placeholder="Abuzer Kömürcü" {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />
@@ -184,20 +183,20 @@ export default function RegisterPage() {
                                     <Checkbox className="control" checked={isStudent} onCheckedChange={x => {
                                         if (x === true)
                                             setIsStudent(true);
-                                        else{
+                                        else {
                                             setIsStudent(false);
                                             setFromIZTECH(false);
                                         }
-                                    }}/>
+                                    }} />
                                 </FormControl>
                                 <FormLabel>I&#39;m Student</FormLabel>
-                                <FormMessage/>
+                                <FormMessage />
                             </FormItem>
                             {isStudent && <motion.div
                                 layout
                                 initial={{ scaleY: 0, originY: 0 }}
                                 animate={{ scaleY: 1, originY: 0 }}
-                                transition={{duration: 0.2}}
+                                transition={{ duration: 0.2 }}
                                 exit={{ scaleY: 0, originY: 0 }}
                             >
                                 <div className="flex flex-col gap-y-2">
@@ -210,7 +209,7 @@ export default function RegisterPage() {
                                                 <FormControl>
                                                     <Input className="control" placeholder="3293293289" {...field} />
                                                 </FormControl>
-                                                <FormMessage className="text-[#606060]"/>
+                                                <FormMessage className="text-[#606060]" />
                                             </FormItem>
                                         )}
                                     />
@@ -232,15 +231,15 @@ export default function RegisterPage() {
                                                             <SelectContent className="control">
                                                                 {
                                                                     departments.data?.map(x =>
-                                                                        (
-                                                                            <SelectItem key={x.slug} value={x.slug}>{x.name}</SelectItem>
-                                                                        )
+                                                                    (
+                                                                        <SelectItem key={x.slug} value={x.slug}>{x.name}</SelectItem>
+                                                                    )
                                                                     )
                                                                 }
                                                             </SelectContent>
                                                         </Select>
                                                     </FormControl>
-                                                    <FormMessage className="text-[#606060]"/>
+                                                    <FormMessage className="text-[#606060]" />
                                                 </FormItem>
                                             )}
                                         />
@@ -248,14 +247,14 @@ export default function RegisterPage() {
                                     <FormItem className="flex flex-row gap-x-2">
                                         <FormControl>
                                             <Checkbox checked={fromIZTECH} onCheckedChange={x => {
-                                                if (x === true){
+                                                if (x === true) {
                                                     setFromIZTECH(true);
                                                     setIsStudent(true);
                                                 }
-                                                else{
+                                                else {
                                                     setFromIZTECH(false);
                                                 }
-                                            }}/>
+                                            }} />
                                         </FormControl>
                                         <FormLabel>I&#39;m From IZTECH</FormLabel>
                                     </FormItem>
@@ -271,7 +270,7 @@ export default function RegisterPage() {
                                         <FormControl>
                                             <Input className="control" placeholder="Amasya Uni" {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />}
@@ -285,7 +284,7 @@ export default function RegisterPage() {
                                         <FormControl>
                                             <Input className="control" placeholder="05*********" {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />
@@ -299,7 +298,7 @@ export default function RegisterPage() {
                                         <FormControl>
                                             <Input className="control" placeholder="email@iztech.com.tr" {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />
@@ -312,7 +311,7 @@ export default function RegisterPage() {
                                         <FormControl>
                                             <Input type={"password"} className="control" placeholder="********" {...field} />
                                         </FormControl>
-                                        <FormMessage className="text-[#606060]"/>
+                                        <FormMessage className="text-[#606060]" />
                                     </FormItem>
                                 )}
                             />
@@ -328,16 +327,17 @@ export default function RegisterPage() {
                                         delay: 0.1,
                                         duration: 0.5,
                                         ease: [0.19, 1, 0.22, 1],
-                                    },}}
+                                    },
+                                }}
                                 whileTap={{
                                     borderRadius: "2px"
                                 }}
                             >
                                 <Button type="submit" className="w-full" disabled={isSubmitting}>
-                                <span className="flex items-center gap-2">
-                                    Sign Up
-                                    <LandPlot className="h-4 w-4" />
-                                </span>
+                                    <span className="flex items-center gap-2">
+                                        Sign Up
+                                        <LandPlot className="h-4 w-4" />
+                                    </span>
                                 </Button>
                             </motion.div>
                         </motion.form>
