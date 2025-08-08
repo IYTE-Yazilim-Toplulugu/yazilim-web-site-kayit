@@ -6,7 +6,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LandPlot } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -22,7 +22,7 @@ const departments = await supabase
     .from("departments")
     .select("name,slug");
 
-export default function RegisterPage() {
+function Register() {
     const [isStudent, setIsStudent] = useState(true);
     const [fromIZTECH, setFromIZTECH] = useState(true);
     const [department, setDepartment] = useState('');
@@ -350,4 +350,13 @@ export default function RegisterPage() {
             </div>
         </div>
     );
+}
+
+
+export default function RegisterPage() {
+    return (
+        <Suspense>
+            <Register />
+        </Suspense>
+    )
 }

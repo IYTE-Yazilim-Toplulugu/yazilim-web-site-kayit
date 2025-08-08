@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { Suspense } from 'react';
 
 const formSchema = z.object({
     email: z.string().email({
@@ -31,7 +32,7 @@ function onSubmit(values: z.infer<typeof formSchema>) {
     window.top?.postMessage(JSON.stringify(data), "*");
 }
 
-export default function Login() {
+function LoginForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -128,4 +129,12 @@ export default function Login() {
         </div>
 
     )
+}
+
+export default function Login() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <LoginForm />
+        </Suspense>
+    );
 }
