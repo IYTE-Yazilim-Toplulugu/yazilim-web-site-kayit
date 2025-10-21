@@ -40,7 +40,7 @@ function Register() {
         department: z.string().optional(),
         fromIZTECH: z.boolean(),
         place: z.string().optional(),
-        phone: z.string().regex(RegExp("^((\\+\\d+)|(05\\d{9}))$"), {
+        phone: z.string().regex(RegExp("^((\\+)?\\d+)$"), {
             message: "Please enter a valid phone number. (+1 5** *** **** / 05*********)",
         }),
         email: z.string().email({
@@ -131,7 +131,7 @@ function Register() {
     const msg = params.get("msg");
 
     return (
-        <div className={"flex h-dvh "}>
+        <div className={"flex "}>
             <div className="hidden relative w-2/3 overflow-hidden sm:block">
                 <Image
                     src="/images/back.jpg"
@@ -152,7 +152,7 @@ function Register() {
                 />
                 <div className="absolute top-0 right-0 h-full w-1/4 bg-gradient-to-l from-[var(--background)] to-transparent pointer-events-none" />
             </div>*/}
-            <div className="flex-grow-3 flex align-middle items-center justify-center">
+            <div className="flex-grow-3 flex mt-24 align-middle items-center justify-center">
                 <motion.div
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
